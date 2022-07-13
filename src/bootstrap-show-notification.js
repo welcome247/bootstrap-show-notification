@@ -3,7 +3,7 @@
  * Repository: https://github.com/shaack/bootstrap-show-notification
  * License: MIT, see file 'LICENSE'
  */
-;(function ($) {
+ ;(function ($) {
     "use strict"
 
     function Notification(props) {
@@ -17,14 +17,15 @@
             shadow: "0 2px 6px rgba(0,0,0,0.2)", // the box-shadow
             zIndex: 100,
             margin: "1rem", // the margin (above maxWidth)
-            direction: "prepend" // or "append", the stack direction
+            direction: "append", // prepend or "append", the stack direction
+            
         }
         this.containerId = "bootstrap-show-notification-container"
         for (let prop in props) {
             // noinspection JSUnfilteredForInLoop
             this.props[prop] = props[prop]
         }
-        const cssClass = "alert alert-" + this.props.type + " alert-dismissible fade"
+        const cssClass = "alert alert-" + this.props.type + " alert-dismissible fade MoveDown " //fork add Movedown
         this.id = "id-" + Math.random().toString(36).substr(2)
         this.template =
             "<div class='" + cssClass + "' role='alert'>" + this.props.body +
@@ -52,7 +53,29 @@
                 "@media screen and (max-width: " + this.props.maxWidth + ") {" +
                 "#" + this.containerId + " {min-width: 0; max-width: 100%; width: 100%; right: 0; top: 0;}" +
                 "#" + this.containerId + " .alert {min-width: 0; margin-bottom: 0.25rem;width: auto;float: none;}" +
-                "}"
+                "}"+
+                //fork add transition css
+                "@-webkit-keyframes MoveDown { \
+                    from { \
+                      opacity: 0; \
+                      -webkit-transform: translate3d(0, -100%, 0); \
+                      transform: translate3d(0, -100%, 0); \
+                    } \
+                    to { \
+                      opacity: 1; \
+                      -webkit-transform: none; \
+                      transform: none; \
+                    } \
+                  } \
+                   .MoveDown { \
+                    -webkit-animation-name: MoveDown; \
+                    animation-name: MoveDown; \
+                    -webkit-animation-duration: 0.5s; \
+                    animation-duration: 0.5s; \
+                    -webkit-animation-fill-mode: both; \
+                    animation-fill-mode: both;  \
+                  }"
+
             const head = document.head || document.getElementsByTagName('head')[0]
             const style = document.createElement('style')
             head.appendChild(style)
